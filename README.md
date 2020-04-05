@@ -20,7 +20,7 @@ kcvm is a kubectl version manager
 
 `kcvm init`
 
-Add kcvm folder to your $PATH : `export PATH=$PATH:$HOME/.kcvm`
+Add kcvm folder to your $PATH : `export PATH=$HOME/.kcvm:$PATH`
 
 #### List available kubectl versions
 
