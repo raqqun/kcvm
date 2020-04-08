@@ -8,7 +8,7 @@ kcvm is a kubectl version manager
 
 - Download latest release.
 
-`curl -L -o /tmp/kcvm https://github.com/raqqun/kcvm/releases/download/v1.0.0-alpha/kcvm-v1.0.0-alpha-linux-amd64`
+`curl -L -o /tmp/kcvm https://github.com/raqqun/kcvm/releases/download/v1.0.0-alpha1/kcvm-v1.0.0-alpha-linux-amd64`
 
 - Make it executable and move to $PATH
 
