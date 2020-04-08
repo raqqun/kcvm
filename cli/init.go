@@ -12,9 +12,9 @@ var InitCmd = cli.Command{
 	Name:  "init",
 	Usage: "Initialize kcvm",
 	Action: func(c *cli.Context) error {
-		_, err := os.Stat(KcvmPath)
+		_, err := os.Stat(KubectlBinPath)
 		if os.IsNotExist(err) {
-			err = os.Mkdir(KcvmPath, 0755)
+			err = os.MkdirAll(KubectlBinPath, 0755)
 			if err != nil {
 				return err
 			}
