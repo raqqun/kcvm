@@ -20,13 +20,14 @@ var InstallCmd = cli.Command{
 		}
 
 		kubectlVersion := c.Args().Get(0)
-		kubectlPath := path.Join(KubectlBinPath, fmt.Sprintf("kubectl-%s", kubectlVersion))
+		KubectlBinPath := path.Join(KubectlBinPath, fmt.Sprintf("kubectl-%s", kubectlVersion))
+		kubectlTempPath := path.Join(KubectlBinTempPath, fmt.Sprintf("kubectl-%s", kubectlVersion))
 		kubectlSymPath := path.Join(KcvmPath, "kubectl")
 
 		client := resty.New()
 
 		resp, err := client.R().
-			SetOutput(kubectlPath).
+			SetOutput(kubectlTempPath).
 			Get(fmt.Sprintf("https://storage.googleapis.com/kubernetes-release/release/%s/bin/%s/%s/kubectl", kubectlVersion, GOOS, GOARCH))
 
 		if err != nil {
@@ -37,7 +38,12 @@ var InstallCmd = cli.Command{
 			return errors.New("This kubectl version does not exist")
 		}
 
-		err = os.Chmod(kubectlPath, 0775)
+		err = os.Chmod(kubectlTempPath, 0775)
+		if err != nil {
+			return err
+		}
+
+		err = os.Rename(kubectlTempPath, KubectlBinPath)
 		if err != nil {
 			return err
 		}
@@ -50,7 +56,7 @@ var InstallCmd = cli.Command{
 			}
 		}
 
-		err = os.Symlink(kubectlPath, kubectlSymPath)
+		err = os.Symlink(KubectlBinPath, kubectlSymPath)
 		if err != nil {
 			return err
 		}

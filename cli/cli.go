@@ -8,9 +8,10 @@ import (
 )
 
 var (
-	UserHome, _    = os.UserHomeDir()
-	KcvmPath       = path.Join(UserHome, ".kcvm")
-	KubectlBinPath = path.Join(UserHome, ".kcvm", "bin")
+	UserHome, _        = os.UserHomeDir()
+	KcvmPath           = path.Join(UserHome, ".kcvm")
+	KubectlBinPath     = path.Join(UserHome, ".kcvm", "bin")
+	KubectlBinTempPath = path.Join(os.TempDir(), "kcvm")
 )
 
 const (
