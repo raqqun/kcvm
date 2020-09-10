@@ -34,28 +34,38 @@ var ListCmd = cli.Command{
 			Usage: "List upstream kubectl versions",
 			Action: func(c *cli.Context) error {
 				client := resty.New()
+				var githubPages = []int{1, 2, 3}
 
-				var tags GithubTags
-				resp, err := client.R().
-					SetHeader("Accept", "application/json").
-					SetResult(&tags).
-					Get("https://api.github.com/repos/kubernetes/kubernetes/tags?per_page=100&page=1")
+				var respTags GithubTags
 
-				if err != nil {
-					return err
+				for _, i := range githubPages {
+					resp, err := client.R().
+						SetHeader("Accept", "application/json").
+						SetResult(GithubTags{}).
+						Get(fmt.Sprintf("https://api.github.com/repos/kubernetes/kubernetes/tags?per_page=100&page=%d", i))
+
+					if err != nil {
+						return err
+					}
+
+					tags := resp.Result().(*GithubTags)
+
+					for _, tag := range *tags {
+						respTags = append(respTags, tag)
+					}
+
+					fmt.Print(respTags)
 				}
 
-				respTags := resp.Result().(*GithubTags)
-
-				for i := range *respTags {
+				for i := range respTags {
 					switch {
-					case strings.Contains((*respTags)[i].Name, "beta"):
+					case strings.Contains(respTags[i].Name, "beta"):
 						fallthrough
-					case strings.Contains((*respTags)[i].Name, "alpha"):
+					case strings.Contains(respTags[i].Name, "alpha"):
 						fallthrough
-					case strings.Contains((*respTags)[i].Name, "rc"):
+					case strings.Contains(respTags[i].Name, "rc"):
 					default:
-						fmt.Println((*respTags)[i].Name)
+						fmt.Println(respTags[i].Name)
 					}
 				}
 
