@@ -53,8 +53,6 @@ var ListCmd = cli.Command{
 					for _, tag := range *tags {
 						respTags = append(respTags, tag)
 					}
-
-					fmt.Print(respTags)
 				}
 
 				for i := range respTags {
