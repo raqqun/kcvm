@@ -1,4 +1,4 @@
-name: Go
+name: Build
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
       run: go build ./cmd/kcvm/
 
     - name: Create a Release
-      id: create_release 
+      id: create_release
       uses: actions/create-release@v1.1.4
       with:
         # The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag
@@ -40,16 +40,14 @@ jobs:
         prerelease: true
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+
     - name: Upload Release Asset
-      id: upload_release_asset 
+      id: upload_release_asset
       uses: actions/upload-release-asset@v1
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
         asset_path: ./kcvm
         asset_name: kcvm-${{ steps.short_sha.outputs.sha }}
         asset_content_type: application/vnd.github.v3+json
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
