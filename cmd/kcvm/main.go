@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	Version  = "0"
-	CommitID = "0"
+	Version string
+	CommitID string
 )
 
 func init() {
@@ -26,6 +26,7 @@ func init() {
 
 func main() {
 	kcvm := cli.NewApp()
+	kcvm.EnableBashCompletion = true
 
 	kcvm.Name = "kcvm"
 	kcvm.HelpName = kcvm.Name
