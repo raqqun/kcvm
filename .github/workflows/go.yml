@@ -34,6 +34,6 @@ jobs:
         tag_name: ${{ github.sha }}
         # The name of the release. For example, `Release v1.0.1`
         release_name: Release ${{ github.sha }}
-        prerelease:: true
+        prerelease: true
 
 
