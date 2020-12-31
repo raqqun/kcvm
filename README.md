@@ -1,5 +1,5 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/raqqun/kcvm)](https://goreportcard.com/report/github.com/raqqun/kcvm)
-
+![Build](https://github.com/raqqun/kcvm/workflows/Build/badge.svg?branch=master)
 
 # kcvm
 kcvm is a kubectl version manager
