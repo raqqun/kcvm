@@ -21,20 +21,22 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
+    - uses: benjlevesque/short-sha@v1.2
+        id: short_sha
+        with:
+          length: 8
+
     - name: Build
       run: go build -v ./cmd/kcvm/
-    
-    - name: ls pwd
-      run: ls -la
 
     - name: Create a Release
       id: create_release 
       uses: actions/create-release@v1.1.4
       with:
         # The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag
-        tag_name: ${{ github.sha }}
+        tag_name: ${{ steps.short_sha.outputs.sha }}
         # The name of the release. For example, `Release v1.0.1`
-        release_name: Release ${{ github.sha }}
+        release_name: Release ${{ steps.short_sha.outputs.sha }}
         prerelease: true
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -45,7 +47,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
         asset_path: ./kcvm
-        asset_name: kcvm-${{ github.sha }}
+        asset_name: kcvm-${{ steps.short_sha.outputs.sha }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
