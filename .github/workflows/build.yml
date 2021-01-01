@@ -27,7 +27,7 @@ jobs:
         length: 8
 
     - name: Build
-      run: go build ./cmd/kcvm/
+      run: go build -ldflags "-X main.CommitSHA=${{ steps.short_sha.outputs.sha }} -X cmds.Version=v1.0.0-alpha1" ./cmd/kcvm/
 
     - name: Create a Release
       id: create_release

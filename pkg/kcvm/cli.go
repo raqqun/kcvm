@@ -2,9 +2,16 @@ package cmds
 
 import (
 	"github.com/urfave/cli/v2" // imports as package "cli"
+	"fmt"
 	"os"
 	"path"
 	"runtime"
+
+)
+
+var (
+	Version string
+	CommitSHA string
 )
 
 var (
@@ -27,4 +34,18 @@ var Commands = []*cli.Command{
 	&InstallCmd,
 	&ListCmd,
 	&UseCmd,
+}
+
+func InitCLI() *cli.App {
+	app := cli.NewApp()
+	app.EnableBashCompletion = true
+
+	app.Name = "kcvm"
+	app.HelpName = app.Name
+	app.Usage = "A kubectl version manager!"
+	app.Version = fmt.Sprintf("%s - %s", Version, CommitSHA)
+
+	app.Commands = Commands
+
+	return app
 }
