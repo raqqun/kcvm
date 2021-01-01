@@ -44,6 +44,7 @@ jobs:
     - name: Recreate release
       # You may pin to the exact commit or the version.
       uses: GongT/actions-recreate-release@v1
+      id: create_release
       with:
         # The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag
         tag_name: v1.0.0-alpha1
