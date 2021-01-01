@@ -51,6 +51,8 @@ jobs:
         release_name: Release v1.0.0-alpha1
         # `true` to identify the release as a prerelease. `false` to identify the release as a full release. Default: `false`
         prerelease: true # optional
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
     - name: Upload Release Asset
