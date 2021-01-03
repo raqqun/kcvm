@@ -2,6 +2,7 @@ package cmds
 
 import (
 	"os"
+	"path"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2" // imports as package "cli"
@@ -12,9 +13,9 @@ var InitCmd = cli.Command{
 	Name:  "init",
 	Usage: "Initialize kcvm",
 	Action: func(c *cli.Context) error {
-		_, err := os.Stat(KubectlBinPath)
+		_, err := os.Stat(path.Join(KcvmPath, "bin"))
 		if os.IsNotExist(err) {
-			err = os.MkdirAll(KubectlBinPath, 0755)
+			err = os.MkdirAll(path.Join(KcvmPath, "bin"), 0755)
 			if err != nil {
 				return err
 			}

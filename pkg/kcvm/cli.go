@@ -2,23 +2,16 @@ package cmds
 
 import (
 	"github.com/urfave/cli/v2" // imports as package "cli"
-	"fmt"
 	"os"
 	"path"
 	"runtime"
-
 )
 
 var (
-	Version string
-	CommitSHA string
-)
-
-var (
-	UserHome, _        = os.UserHomeDir()
-	KcvmPath           = path.Join(UserHome, ".kcvm")
-	KubectlBinPath     = path.Join(UserHome, ".kcvm", "bin")
-	KubectlBinTempPath = path.Join(os.TempDir(), "kcvm")
+	UserHome string
+	KcvmPath string
+	// KubectlBinPath     string
+	// KubectlBinTempPath string
 )
 
 const (
@@ -37,15 +30,27 @@ var Commands = []*cli.Command{
 }
 
 func InitCLI() *cli.App {
+
+	UserHome, _ = os.UserHomeDir()
+	KcvmPath = path.Join(UserHome, ".kcvm")
+	// KubectlBinPath = path.Join(KcvmPath, "bin")
+	// KubectlBinTempPath = path.Join(os.TempDir(), "kcvm")
+
 	app := cli.NewApp()
 	app.EnableBashCompletion = true
 
 	app.Name = "kcvm"
 	app.HelpName = app.Name
 	app.Usage = "A kubectl version manager!"
-	app.Version = fmt.Sprintf("%s - %s", Version, CommitSHA)
-
 	app.Commands = Commands
+	app.Flags = []cli.Flag{
+		&cli.StringFlag{
+			Name:        "dir",
+			Value:       KcvmPath,
+			Usage:       "home directory for kcvm",
+			Destination: &KcvmPath,
+		},
+	}
 
 	return app
 }

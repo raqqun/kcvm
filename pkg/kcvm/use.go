@@ -18,10 +18,10 @@ var UseCmd = cli.Command{
 		}
 
 		kubectlVersion := c.Args().Get(0)
-		KubectlBinPath := path.Join(KubectlBinPath, fmt.Sprintf("kubectl-%s", kubectlVersion))
+		kubectlBinPath := path.Join(path.Join(KcvmPath, "bin"), fmt.Sprintf("kubectl-%s", kubectlVersion))
 		kubectlSymPath := path.Join(KcvmPath, "kubectl")
 
-		_, err := os.Stat(KubectlBinPath)
+		_, err := os.Stat(kubectlBinPath)
 		if os.IsNotExist(err) {
 			if err != nil {
 				return errors.New("This kubectl version does not exist")
@@ -36,7 +36,7 @@ var UseCmd = cli.Command{
 			}
 		}
 
-		err = os.Symlink(KubectlBinPath, kubectlSymPath)
+		err = os.Symlink(kubectlBinPath, kubectlSymPath)
 		if err != nil {
 			return err
 		}

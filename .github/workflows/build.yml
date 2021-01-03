@@ -26,9 +26,12 @@ jobs:
       with:
         length: 8
 
+    - name: Run Tests
+      run: go test ./test/kcvm/ -v
+
     - name: Build
-      run: go build -ldflags "-X github.com/raqqun/kcvm/pkg/kcvm.CommitSHA=${{ steps.short_sha.outputs.sha }} -X github.com/raqqun/kcvm/pkg/kcvm.Version=v1.0.0-alpha1" ./cmd/kcvm/
-    
+      run: go build -ldflags "-X main.commitSHA=${{ steps.short_sha.outputs.sha }} -X main.version=v1.0.0-alpha1" ./cmd/kcvm/
+
     - name: Delete tag and release
       # You may pin to the exact commit or the version.
       # uses: dev-drprasad/delete-tag-and-release@6bf166de162e06a25bd2055f3be7b2f33f8b5cc8

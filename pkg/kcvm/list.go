@@ -3,6 +3,7 @@ package cmds
 import (
 	"fmt"
 	"io/ioutil"
+	"path"
 	"sort"
 	"strings"
 
@@ -74,7 +75,7 @@ var ListCmd = cli.Command{
 			Name:  "local",
 			Usage: "List locally installed kubectl version",
 			Action: func(c *cli.Context) error {
-				files, err := ioutil.ReadDir(KubectlBinPath)
+				files, err := ioutil.ReadDir(path.Join(KcvmPath, "bin"))
 				if err != nil {
 					return err
 				}
