@@ -9,7 +9,7 @@ on:
 env:
   go-version: 1.15
   short-sha-length: 8
-  release-tag: v0.2.0-beta1
+  release-tag: v0.2.1-beta1
 
 jobs:
 
@@ -35,7 +35,7 @@ jobs:
       run: go test ./test/kcvm/ -v
 
     - name: Build
-      run: go build -ldflags "-X main.commitSHA=${{ steps.short_sha.outputs.sha }} -X main.version=v1.0.0-alpha1" ./cmd/kcvm/
+      run: go build -ldflags "-X main.commitSHA=${{ steps.short_sha.outputs.sha }} -X main.version=${{ env.release-tag }}" ./cmd/kcvm/
 
     - name: Create a Release
       id: create_release
