@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ master ]
 
-values:
+env:
   go-version: 1.15
   short-sha-length: 8
   release-tag: v0.2.0-beta1
