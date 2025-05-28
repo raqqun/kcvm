@@ -9,7 +9,7 @@ on:
 env:
   go-version: 1.15
   short-sha-length: 8
-  release-tag: v0.2.1-beta1
+  release-tag: v0.2.2-beta1
 
 jobs:
 

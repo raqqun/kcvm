@@ -28,7 +28,7 @@ var InstallCmd = cli.Command{
 
 		resp, err := client.R().
 			SetOutput(kubectlTempPath).
-			Get(fmt.Sprintf("https://storage.googleapis.com/kubernetes-release/release/%s/bin/%s/%s/kubectl", kubectlVersion, GOOS, GOARCH))
+			Get(fmt.Sprintf("https://dl.k8s.io/release/%s/bin/%s/%s/kubectl", kubectlVersion, GOOS, GOARCH))
 
 		if err != nil {
 			return err
