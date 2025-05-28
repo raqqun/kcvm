@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ master ]
 
+values:
+  go-version: 1.15
+  short-sha-length: 8
+  release-tag: v0.2.0-beta1
+
 jobs:
 
   build:
@@ -32,26 +37,14 @@ jobs:
     - name: Build
       run: go build -ldflags "-X main.commitSHA=${{ steps.short_sha.outputs.sha }} -X main.version=v1.0.0-alpha1" ./cmd/kcvm/
 
-    - name: Delete tag and release
-      # You may pin to the exact commit or the version.
-      # uses: dev-drprasad/delete-tag-and-release@6bf166de162e06a25bd2055f3be7b2f33f8b5cc8
-      uses: dev-drprasad/delete-tag-and-release@v0.1.2
-      with:
-        # tag name
-        tag_name: v1.0.0-alpha1
-        # whether to delete release or not
-        delete_release: true
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Create a Release
       id: create_release
       uses: actions/create-release@v1.1.4
       with:
         # The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag
-        tag_name: v1.0.0-alpha1
+        tag_name: ${{ values.release-tag }}
         # The name of the release. For example, `Release v1.0.1`
-        release_name: Release v1.0.0-alpha1
+        release_name: Release ${{ values.release-tag }}
         prerelease: true
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -62,7 +55,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
         asset_path: ./kcvm
-        asset_name: kcvm-v1.0.0-alpha1-linux-amd64
+        asset_name: kcvm-${{ values.release-tag }}-linux-amd64
         asset_content_type: application/vnd.github.v3+json
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
