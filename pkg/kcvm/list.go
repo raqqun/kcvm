@@ -35,25 +35,28 @@ var ListCmd = cli.Command{
 			Usage: "List upstream kubectl versions",
 			Action: func(c *cli.Context) error {
 				client := resty.New()
-				var githubPages = []int{1, 2, 3}
-
 				var respTags GithubTags
 
-				for _, i := range githubPages {
+				page := 1
+				for {
 					resp, err := client.R().
 						SetHeader("Accept", "application/json").
 						SetResult(GithubTags{}).
-						Get(fmt.Sprintf("https://api.github.com/repos/kubernetes/kubernetes/tags?per_page=100&page=%d", i))
+						Get(fmt.Sprintf("https://api.github.com/repos/kubernetes/kubernetes/tags?per_page=100&page=%d", page))
 
 					if err != nil {
 						return err
 					}
 
 					tags := resp.Result().(*GithubTags)
+					if len(*tags) == 0 {
+						break // No more pages
+					}
 
 					for _, tag := range *tags {
 						respTags = append(respTags, tag)
 					}
+					page++
 				}
 
 				for i := range respTags {
