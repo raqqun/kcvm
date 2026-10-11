@@ -9,15 +9,15 @@ so you can always use a kubectl that matches the cluster you are talking to.
 
 ## Installation
 
-- Download the latest linux-amd64 binary from the [releases page](https://github.com/raqqun/kcvm/releases), e.g. for v0.3.0
+- Download the latest archive for your platform (linux or darwin, amd64 or arm64) from the [releases page](https://github.com/raqqun/kcvm/releases), e.g. for v0.3.0 on linux-amd64
 
-`curl -L -o /tmp/kcvm https://github.com/raqqun/kcvm/releases/download/v0.3.0/kcvm-v0.3.0-linux-amd64`
+`curl -L https://github.com/raqqun/kcvm/releases/download/v0.3.0/kcvm-v0.3.0-linux-amd64.tar.gz | tar -xz -C /tmp kcvm`
 
-- Make it executable and move to $PATH
+- Move it to $PATH
 
-`chmod +x /tmp/kcvm && sudo mv /tmp/kcvm /usr/local/bin`
+`sudo mv /tmp/kcvm /usr/local/bin`
 
-On other platforms, build it with Go 1.16 or later:
+Or build it with Go 1.16 or later:
 
 `go install github.com/raqqun/kcvm/cmd/kcvm@latest`
 
@@ -86,3 +86,16 @@ Use the global `--dir` flag to keep kcvm somewhere else than `~/.kcvm`, e.g.
 
 The [VERSION](VERSION) file holds the kcvm version, following [semver](https://semver.org).
 Bump it for every new version: `kcvm --version` reports it and releases are tagged with it.
+
+## Releasing
+
+Releases are only created from pull requests:
+
+1. Bump the version in the [VERSION](VERSION) file in a pull request to `master`.
+2. The [Test](.github/workflows/test.yaml) workflow runs the tests and builds kcvm for every platform.
+3. Once the pull request is merged, the [Release](.github/workflows/release.yaml) workflow
+   tags the merge commit with the version and publishes the binaries with
+   [GoReleaser](https://goreleaser.com), configured in [.goreleaser.yaml](.goreleaser.yaml).
+
+Merged pull requests that leave VERSION unchanged release nothing. Versions with a
+suffix, e.g. `v0.4.0-beta1`, are published as prereleases.
