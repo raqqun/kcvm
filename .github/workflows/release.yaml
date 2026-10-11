@@ -1,0 +1,60 @@
+name: Release
+
+# Publishes a release when a pull request is merged into master and the VERSION
+# file contains a version that has not been released yet.
+on:
+  pull_request:
+    types: [closed]
+    branches: [master]
+
+permissions:
+  contents: write
+
+jobs:
+
+  release:
+    name: Release
+    if: github.event.pull_request.merged
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out the merged code
+      uses: actions/checkout@v7
+      with:
+        ref: ${{ github.event.pull_request.merge_commit_sha }}
+        fetch-depth: 0
+
+    - name: Read version
+      id: version
+      run: |
+        version=$(cat VERSION)
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+        if [ -n "$(git tag --list "$version")" ]; then
+          echo "$version is already released, bump the VERSION file to release a new version"
+          echo "new=false" >> "$GITHUB_OUTPUT"
+        else
+          echo "new=true" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Tag the version
+      if: steps.version.outputs.new == 'true'
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        git tag "$VERSION"
+        git push origin "$VERSION"
+
+    - name: Set up Go
+      if: steps.version.outputs.new == 'true'
+      uses: actions/setup-go@v7
+      with:
+        go-version: stable
+
+    - name: Release with GoReleaser
+      if: steps.version.outputs.new == 'true'
+      uses: goreleaser/goreleaser-action@v7
+      with:
+        version: "~> v2"
+        args: release --clean
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

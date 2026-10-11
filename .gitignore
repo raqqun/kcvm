@@ -15,3 +15,6 @@
 vendor/
 
 /kcvm
+
+# GoReleaser output
+/dist/
