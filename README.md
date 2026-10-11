@@ -8,6 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/raqqun/kcvm/actions/workflows/test.yaml"><img src="https://github.com/raqqun/kcvm/actions/workflows/test.yaml/badge.svg" alt="Test"></a>
+  <a href="https://github.com/raqqun/kcvm/releases/latest"><img src="https://img.shields.io/github/v/release/raqqun/kcvm" alt="Release"></a>
 </p>
 
 kcvm installs several kubectl versions side by side and lets you switch between them,
