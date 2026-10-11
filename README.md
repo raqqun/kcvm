@@ -15,9 +15,9 @@ so you can always use a kubectl that matches the cluster you are talking to.
 
 ## Installation
 
-- Download the latest archive for your platform (linux or darwin, amd64 or arm64) from the [releases page](https://github.com/raqqun/kcvm/releases), e.g. for v0.3.0 on linux-amd64
+- Download the latest archive for your platform (linux or darwin, amd64 or arm64) from the [releases page](https://github.com/raqqun/kcvm/releases), e.g. for v0.3.1 on linux-amd64
 
-`curl -L https://github.com/raqqun/kcvm/releases/download/v0.3.0/kcvm-v0.3.0-linux-amd64.tar.gz | tar -xz -C /tmp kcvm`
+`curl -L https://github.com/raqqun/kcvm/releases/download/v0.3.1/kcvm-v0.3.1-linux-amd64.tar.gz | tar -xz -C /tmp kcvm`
 
 - Move it to $PATH
 
