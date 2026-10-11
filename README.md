@@ -1,10 +1,16 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/raqqun/kcvm)](https://goreportcard.com/report/github.com/raqqun/kcvm)
-![Build](https://github.com/raqqun/kcvm/workflows/Build/badge.svg?branch=master)
+<p align="center">
+  <img src="assets/kcvm-logo.png" alt="kcvm" width="300">
+</p>
 
-# kcvm
-kcvm is a kubectl version manager.
+<p align="center">
+  <b><i>A kubectl version manager</i></b>
+</p>
 
-It installs several kubectl versions side by side and lets you switch between them,
+<p align="center">
+  <a href="https://github.com/raqqun/kcvm/actions/workflows/test.yaml"><img src="https://github.com/raqqun/kcvm/actions/workflows/test.yaml/badge.svg" alt="Test"></a>
+</p>
+
+kcvm installs several kubectl versions side by side and lets you switch between them,
 so you can always use a kubectl that matches the cluster you are talking to.
 
 ## Installation
