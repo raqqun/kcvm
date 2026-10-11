@@ -2,7 +2,7 @@ package cmds
 
 import (
 	"os"
-	"path"
+	"path/filepath"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2" // imports as package "cli"
@@ -13,20 +13,33 @@ var InitCmd = cli.Command{
 	Name:  "init",
 	Usage: "Initialize kcvm",
 	Action: func(c *cli.Context) error {
-		_, err := os.Stat(path.Join(KcvmPath, "bin"))
+		_, err := os.Stat(binDir())
 		if os.IsNotExist(err) {
-			err = os.MkdirAll(path.Join(KcvmPath, "bin"), 0755)
+			err = os.MkdirAll(binDir(), 0755)
 			if err != nil {
 				return err
 			}
 
 			log.Info("Path " + KcvmPath + " Created")
-
-			return nil
+		} else if err != nil {
+			return err
+		} else {
+			log.Info("Path " + KcvmPath + " Exists")
 		}
 
-		log.Info("Path " + KcvmPath + " Exists")
+		if !inPath(KcvmPath) {
+			log.Warn("Add kcvm to your $PATH: export PATH=" + KcvmPath + ":$PATH")
+		}
 
 		return nil
 	},
+}
+
+func inPath(dir string) bool {
+	for _, entry := range filepath.SplitList(os.Getenv("PATH")) {
+		if filepath.Clean(entry) == dir {
+			return true
+		}
+	}
+	return false
 }

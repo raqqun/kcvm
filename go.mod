@@ -1,6 +1,6 @@
 module github.com/raqqun/kcvm
 
-go 1.14
+go 1.16
 
 require (
 	github.com/go-resty/resty/v2 v2.2.0
