@@ -1,0 +1,52 @@
+name: Test
+
+# Tests every pull request and checks that kcvm builds for every release platform
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out code
+      uses: actions/checkout@v7
+
+    - name: Set up Go
+      uses: actions/setup-go@v7
+      with:
+        go-version: stable
+
+    - name: Vet
+      run: go vet ./...
+
+    # The tests live in test/kcvm, -coverpkg measures the code they exercise in every package
+    - name: Run tests
+      run: go test ./... -v -coverpkg=./... -coverprofile=coverage.out
+
+    - name: Report coverage
+      run: |
+        go tool cover -func=coverage.out > coverage.txt
+        go tool cover -html=coverage.out -o coverage.html
+        echo "Coverage: $(tail -1 coverage.txt | awk '{ print $NF }')" >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Upload coverage
+      uses: actions/upload-artifact@v7
+      with:
+        name: coverage
+        path: |
+          coverage.out
+          coverage.txt
+          coverage.html
+
+    # Builds exactly like a release, without publishing anything
+    - name: Build
+      uses: goreleaser/goreleaser-action@v7
+      with:
+        version: "~> v2"
+        args: release --snapshot --clean

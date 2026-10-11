@@ -1,0 +1,24 @@
+# GoReleaser builds and publishes kcvm releases, see .github/workflows/release.yaml
+version: 2
+
+builds:
+  - main: ./cmd/kcvm
+    env:
+      - CGO_ENABLED=0
+    goos: [linux, darwin]
+    goarch: [amd64, arm64]
+    flags: [-trimpath]
+    ldflags:
+      - -s -w -X main.commitSHA={{ .ShortCommit }}
+
+# Publish tar.gz archives, e.g. kcvm-v0.3.0-linux-amd64.tar.gz
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}"
+
+checksum:
+  name_template: sha256sums.txt
+
+release:
+  # Versions with a suffix, e.g. v0.4.0-beta1, are published as prereleases
+  prerelease: auto
