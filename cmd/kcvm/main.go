@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/raqqun/kcvm"
 	cmds "github.com/raqqun/kcvm/pkg/kcvm"
 	log "github.com/sirupsen/logrus"
 )
@@ -15,17 +16,14 @@ func init() {
 	})
 }
 
-// Set at build time with -ldflags "-X main.version=... -X main.commitSHA=..."
-var (
-	version   = "dev"
-	commitSHA = "unknown"
-)
+// Set at build time with -ldflags "-X main.commitSHA=..."
+var commitSHA = "unknown"
 
 func main() {
-	kcvm := cmds.InitCLI()
-	kcvm.Version = fmt.Sprintf("%s-%s", version, commitSHA)
+	app := cmds.InitCLI()
+	app.Version = fmt.Sprintf("%s-%s", kcvm.Version, commitSHA)
 
-	err := kcvm.Run(os.Args)
+	err := app.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
 	}

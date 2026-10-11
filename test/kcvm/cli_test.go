@@ -10,10 +10,12 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strings"
 	"testing"
 
+	"github.com/raqqun/kcvm"
 	cmds "github.com/raqqun/kcvm/pkg/kcvm"
 	log "github.com/sirupsen/logrus"
 )
@@ -343,5 +345,12 @@ func TestListRemoteServerError(t *testing.T) {
 
 	if err == nil {
 		t.Fatal("expected an error")
+	}
+}
+
+func TestVersion(t *testing.T) {
+	semver := regexp.MustCompile(`^v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$`)
+	if !semver.MatchString(kcvm.Version) {
+		t.Fatalf("VERSION file contains %q, expected a version like v1.2.3", kcvm.Version)
 	}
 }

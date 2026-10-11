@@ -1,6 +1,6 @@
 name: Build
 
-# Disabled until releases are reworked: every run publishes the hardcoded release-tag.
+# Disabled until releases are reworked: every run publishes the release in the VERSION file.
 # Restore the push and pull_request triggers on master to enable it again.
 on:
   workflow_dispatch:
@@ -8,7 +8,6 @@ on:
 env:
   go-version: 1.15
   short-sha-length: 8
-  release-tag: v0.2.2-beta1
 
 jobs:
 
@@ -25,6 +24,10 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
+    - name: Read version
+      id: version
+      run: echo "release-tag=$(cat VERSION)" >> "$GITHUB_OUTPUT"
+
     - uses: benjlevesque/short-sha@v1.2
       id: short_sha
       with:
@@ -34,16 +37,16 @@ jobs:
       run: go test ./test/kcvm/ -v
 
     - name: Build
-      run: go build -ldflags "-X main.commitSHA=${{ steps.short_sha.outputs.sha }} -X main.version=${{ env.release-tag }}" ./cmd/kcvm/
+      run: go build -ldflags "-X main.commitSHA=${{ steps.short_sha.outputs.sha }}" ./cmd/kcvm/
 
     - name: Create a Release
       id: create_release
       uses: actions/create-release@v1.1.4
       with:
         # The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag
-        tag_name: ${{ env.release-tag }}
+        tag_name: ${{ steps.version.outputs.release-tag }}
         # The name of the release. For example, `Release v1.0.1`
-        release_name: Release ${{ env.release-tag }}
+        release_name: Release ${{ steps.version.outputs.release-tag }}
         prerelease: true
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -54,7 +57,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
         asset_path: ./kcvm
-        asset_name: kcvm-${{ env.release-tag }}-linux-amd64
+        asset_name: kcvm-${{ steps.version.outputs.release-tag }}-linux-amd64
         asset_content_type: application/vnd.github.v3+json
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

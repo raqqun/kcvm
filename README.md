@@ -9,9 +9,9 @@ so you can always use a kubectl that matches the cluster you are talking to.
 
 ## Installation
 
-- Download the latest linux-amd64 binary from the [releases page](https://github.com/raqqun/kcvm/releases), e.g.
+- Download the latest linux-amd64 binary from the [releases page](https://github.com/raqqun/kcvm/releases), e.g. for v0.3.0
 
-`curl -L -o /tmp/kcvm https://github.com/raqqun/kcvm/releases/download/v0.2.2-beta1/kcvm-v0.2.2-beta1-linux-amd64`
+`curl -L -o /tmp/kcvm https://github.com/raqqun/kcvm/releases/download/v0.3.0/kcvm-v0.3.0-linux-amd64`
 
 - Make it executable and move to $PATH
 
@@ -81,3 +81,8 @@ Use the global `--dir` flag to keep kcvm somewhere else than `~/.kcvm`, e.g.
 ## Development
 
 `go test ./test/kcvm/` runs the tests against local fake servers, no network access is needed.
+
+## Versioning
+
+The [VERSION](VERSION) file holds the kcvm version, following [semver](https://semver.org).
+Bump it for every new version: `kcvm --version` reports it and releases are tagged with it.
