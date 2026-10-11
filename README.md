@@ -23,7 +23,7 @@ so you can always use a kubectl that matches the cluster you are talking to.
 
 `sudo mv /tmp/kcvm /usr/local/bin`
 
-Or build it with Go 1.16 or later:
+Or build it with Go 1.23 or later:
 
 `go install github.com/raqqun/kcvm/cmd/kcvm@latest`
 
