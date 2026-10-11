@@ -1,10 +1,9 @@
 name: Build
 
+# Disabled until releases are reworked: every run publishes the hardcoded release-tag.
+# Restore the push and pull_request triggers on master to enable it again.
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_dispatch:
 
 env:
   go-version: 1.15
